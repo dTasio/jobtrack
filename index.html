@@ -27,16 +27,19 @@
                 <div class="form-group">
                     <label for="puesto">Puesto</label>
                     <input type="text" id="puesto" name="puesto">
+                    <small class="error-message">Este campo no está completado</small>
                 </div>
                 
                 <div class="form-group">
                     <label for="empresa">Empresa</label>
                     <input type="text" id="empresa" name="empresa">
+                    <small class="error-message">Este campo no está completado</small>
                 </div>
                 
                 <div class="form-group">
                     <label for="fecha">Fecha de candidatura:</label>
                     <input type="date" id="fecha" name="fecha">
+                    <small class="error-message">Este campo no está completado</small>
                 </div>
                 
                 <div class="form-group">
@@ -53,11 +56,13 @@
                 <div class="form-group">
                     <label for="enlace">Enlace de la oferta</label>
                     <input type="url" id="enlace" name="enlace">
+                    <small class="error-message">Este campo no está completado</small>
                 </div>
                 
                 <div class="form-group">
                     <label for="next">Proximo seguimiento</label>
                     <input type="date" id="next" name="next">
+                    <small class="error-message">Este campo no está completado</small>
                 </div>
 
                 <button id="guardar-candidatura" type="submit">
@@ -69,22 +74,22 @@
         <section id="oportunidades">
             <h2>Oportunidades</h2>
             <div>
-                <article>
-                    <div>
+                <article class="oportunidad-card">
+                    <div class="oportunidad-info">
                         <h3>Frontend Developer</h3>
-                        <p>Hiberus</p>
-                        <p>Candidatura: <time datetime="2026-09-08">08/09/2026</time></p>
+                        <p class="empresa">Hiberus</p>
+                        <p>Candidatura: <time class="time-info" datetime="2026-09-08">08/09/2026</time></p>
                         <a href="https://www.linkedin.com/jobs/search-results/?currentJobId=4463342032&eBP=CwEAAAGgyF_DQgpEC4OLvnGq_0j6CbPatz14OWEQbRbutInHvz8u6Xx3Ko_SVDafreoTvDyV6UlE_gtCAANYVr3pJWTW9AHhswyIDUeL-gKB26cu_08qjN2iFEGB4uRkDOhNTobNOAGnjkduVohNEDhy2fHKSPOMyeTaDLN3AQ_TEIop9bzcd0Vm5yk00miLGoG8_VdIc2cP6Ri25k33jekhZ7BBWKua2BMsSnyeMksTrL51Y9M8lurd23C5x_jNI8P5f-WWp4Pta2JReG3gHqjI_ieD_uKElObNveW8rmWm0hEf2losRrk-UrHEWnlVvqZrm-vbgDRk-rt4tsbROaeMju0Jc935A7zx004YQIcVjMBvCbNT-aZ4alrP00Spd9CjBvHKRPMZpGJ-GtcqdEF93yal-L99IKmXtD2iUf1EbgAATA5w3OVGiCQKVaOBCRQ8mPojmioJQgriBN7JKkp_yQSiwC-_vHvDxmEkbB4QLXA&refId=9iciCDptJFuIlAB4Rz3pVQ%3D%3D&trackingId=%2BbtC3Uze1o5i8RvPLy%2B2cg%3D%3D&keywords=full-time%20Desarrollador%20web%20or%20Desarrollador%20de%20front-end%20or%20Programador%20full%20stack%2C%20on-site%20or%20hybrid%20or%20remote&origin=PREFERENCES_LANDING&geoId=106356396">Ver Oferta</a>
                     </div>
-                    <div>
-                        <span>Enviada</span>
-                        <p>Proximo seguimiento</p>
-                        <time datetime="2026-09-25">25/09/2026</time>
+                    <div class="oportunidad-seguimiento">
+                        <span class="estado">Enviada</span>
+                        <p>Proximo seguimiento: <time class="time-seguimiento" datetime="2026-09-25">25/09/2026</time></p>
+                        
                         
                     </div>
-                    <div>
-                        <button>Editar</button>
-                        <button>Eliminar</button>
+                    <div class="oportunidad-acciones">
+                        <button class="editar">Editar</button>
+                        <button class="eliminar">Eliminar</button>
                     </div>
                 </article>
             </div>

@@ -32,6 +32,12 @@
     --status-interview: #7c3aed;
     --status-offer: #15803d;
     --status-closed: #b91c1c;
+
+    /* Acciones */
+    --action-edit: #a9b6c7;
+    --action-edit-hover: #94a3b8;
+    --action-delete: #f87171;
+    --action-delete-hover:#ef4444 ;
 }
 
 
@@ -62,7 +68,13 @@
     --status-sent: #60a5fa;
     --status-interview: #c4b5fd;
     --status-offer: #4ade80;
-    --status-closed: #f87171;
+    --status-closed: rgb(231, 141, 141);
+
+    /* Acciones */
+    --action-edit: #475569;
+    --action-edit-hover: #64748b;
+    --action-delete: #7f1d1d;
+    --action-delete-hover: #991b1b;
 }
 
 body {
@@ -119,6 +131,23 @@ form {
 .form-group {
     display: flex;
     flex-direction: column;
+    gap: 0.5rem;
+}
+
+#guardar-candidatura {
+    grid-column: 2;
+    justify-self: end;
+    padding: 0.75rem 1rem;
+    border: none;
+    border-radius: 4px;
+    background-color: var(--primary);
+    color: var(--text);
+    cursor: pointer;
+    transition: 0.2s ease;
+    font-family: inherit;
+}
+#guardar-candidatura:hover {
+    background-color: var(--accent);
 }
 
 
@@ -128,6 +157,15 @@ input,select {
     border-radius: 4px;
     background-color: var(--surface);
     color: var(--text);
+    width: 100%;
+    min-height: 44px;
+    
+}
+input:focus-visible,
+select:focus-visible,
+#guardar-candidatura:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
 }
 
 #oportunidades {
@@ -140,6 +178,132 @@ input,select {
     letter-spacing: -0.04em;
 }
 
+.oportunidad-card {
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    gap: 1.5rem;
+    align-items: center;
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+}
+.oportunidad-card:hover {
+    background-color: var(--surface-hover);
+}
+
+.oportunidad-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.oportunidad-info h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--primary);
+}
+.empresa {
+    color: var(--text);
+    font-weight: 500;
+}
+
+.time-info, .time-seguimiento {
+    font-size: 1.05rem;
+}
+
+.oportunidad-seguimiento {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: center;
+}
+
+.oportunidad-info a {
+    width: fit-content;
+    color: var(--primary);
+    font-weight: 600;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 3px;
+}
+.oportunidad-info a:hover {
+    color: var(--accent);
+    text-decoration: underline;
+}
+
+.estado{
+    padding: 0.25rem 0.75rem;
+    display: inline-flex;
+    width: fit-content;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+.estado-enviada {
+    color: var(--status-sent);
+    border: 1.5px solid var(--status-sent);
+}
+.estado-entrevista {
+    color: var(--status-interview);
+    border: 1.5px solid var(--status-interview);
+}
+.estado-oferta {
+    color: var(--status-offer);
+    border: 1.5px solid var(--status-offer);
+}
+.estado-cerrada {
+    color: var(--status-closed);
+    border: 1.5px solid var(--status-closed);
+}
+.estado-guardada {
+    color: var(--status-saved);
+    border: 1.5px solid var(--status-saved);
+}
+
+.oportunidad-acciones {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: center;
+    gap: 0.5rem;
+}
+.editar {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    background-color: var(--action-edit);
+    color: var(--text);
+    cursor: pointer;
+    transition: 0.2s ease;
+    font-size: 0.95rem;
+}
+.eliminar {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    background-color: var(--action-delete);
+    color: var(--text);
+    cursor: pointer;
+    transition: 0.2s ease;
+    font-size: 0.95rem;
+}
+.eliminar:hover {
+    background-color: var(--action-delete-hover);
+}
+.editar:hover {
+    background-color: var(--action-edit-hover);
+}
+
+.error-message {
+    color: var(--action-delete);
+    font-size: 0.85rem;
+    display: none;
+}
+.input-error {
+    border-color: var(--action-delete);
+}
+
+
 footer {
     padding: 2rem 0;
     text-align: center;
@@ -147,9 +311,16 @@ footer {
 }
 
 @media (max-width: 768px) {
-
     form {
         grid-template-columns: 1fr;
     }
+    #guardar-candidatura {
+    grid-column: 1;
+    justify-self: stretch;
+    }
+    .oportunidad-card {
+    grid-template-columns: 1fr;
+    
+}
 }
 
