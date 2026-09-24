@@ -239,6 +239,14 @@ select:focus-visible,
     background-color: var(--surface-hover);
 }
 
+.oportunidad-card.editando {
+    box-shadow: 0 0 0 2px var(--primary);
+}
+
+.oportunidad-card.atenuada {
+    opacity: 0.55;
+}
+
 .oportunidad-info {
     display: flex;
     flex-direction: column;
@@ -285,6 +293,7 @@ select:focus-visible,
     border-radius: 999px;
     font-size: 0.85rem;
     font-weight: 600;
+    margin-bottom: 0.25rem;
 }
 .estado-Enviada {
     color: var(--status-sent);
@@ -312,6 +321,11 @@ select:focus-visible,
     color: var(--text-muted);
     border: 1px dashed var(--border);
     border-radius: 12px;
+}
+
+button:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
 }
 
 .oportunidad-acciones {
@@ -374,12 +388,24 @@ footer {
         grid-template-columns: 1fr;
     }
     #guardar-candidatura {
-    grid-column: 1;
-    justify-self: stretch;
+        grid-column: 1;
+        justify-self: stretch;
     }
     .oportunidad-card {
-    grid-template-columns: 1fr;
-    
-}
+        grid-template-columns: 1fr;
+    }
+    #theme-toggle {
+        top: 0.25rem;
+        right: 0.5rem;
+        bottom: auto;
+
+        width: 36px;
+        height: 36px;
+    }
+
+    #theme-toggle img {
+        width: 18px;
+        height: 18px;
+    }
 }
 
