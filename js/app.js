@@ -7,13 +7,18 @@ const estadoSelect = document.querySelector('#estado');
 const enlaceInput = document.querySelector('#enlace');
 const nextInput = document.querySelector('#next');
 
+const seccionFormulario = document.querySelector('#formulario');
+
 const formTitle = document.querySelector('#form-title');
 const guardarBtn = document.querySelector('#guardar-candidatura');
+const cancelarEdicionBtn = document.querySelector('#cancelar-edicion');
 
 const themeToggle = document.querySelector('#theme-toggle');
 const themeIcon = document.querySelector('#theme-icon');
 
 const listaOportunidades = document.querySelector('#lista-oportunidades');
+
+const mensajeExito = document.querySelector('#mensaje-exito');
 
 let oportunidades = [];
 
@@ -21,6 +26,8 @@ let idOportunidadEditando = null;
 
 //LISTENERS
 themeToggle.addEventListener('click', cambiarTema);
+
+cancelarEdicionBtn.addEventListener('click', cancelarEdicion);
 
 document.addEventListener('DOMContentLoaded', () => {
     idOportunidadEditando = null;
@@ -56,6 +63,8 @@ formulario.addEventListener('submit', (event) => {
         const enlace = enlaceInput.value.trim();
         const next = nextInput.value;
 
+        const estabaEditando = idOportunidadEditando !== null;
+
         if (idOportunidadEditando === null) {
 
             const oportunidad = {
@@ -85,8 +94,16 @@ formulario.addEventListener('submit', (event) => {
             };
 
             idOportunidadEditando = null;
+            seccionFormulario.classList.remove('modo-edicion');
             formTitle.textContent = 'Nueva Oportunidad';
             guardarBtn.textContent = 'Guardar candidatura';
+            cancelarEdicionBtn.hidden = true;
+        }
+
+        if (estabaEditando) {
+            mostrarMensaje('Oportunidad actualizada correctamente.');
+        } else {
+            mostrarMensaje('Oportunidad guardada correctamente.');
         }
 
         localStorage.setItem('oportunidades', JSON.stringify(oportunidades));
@@ -245,7 +262,10 @@ function eliminarOportunidad(id) {
 
 //Editar oportunidad
 function editarOportunidad(id) {
+    cancelarEdicionBtn.hidden = false;
+
     const oportunidadEditar = oportunidades.find((oportunidad) => oportunidad.id === id);
+
     if (!oportunidadEditar) {
         console.error('Oportunidad no encontrada');
         return;
@@ -257,8 +277,35 @@ function editarOportunidad(id) {
     enlaceInput.value = oportunidadEditar.enlace;
     nextInput.value = oportunidadEditar.next;
 
+    seccionFormulario.classList.add('modo-edicion');
     formTitle.textContent = 'Editar Oportunidad';
     guardarBtn.textContent = 'Guardar cambios';
+
+    renderizarOportunidades();
+}
+
+//Mostrar Pop-up
+function mostrarMensaje(texto) {
+    mensajeExito.textContent = texto;
+    mensajeExito.classList.add('visible');
+
+    setTimeout(() => {
+        mensajeExito.classList.remove('visible');
+    }, 2500);
+}
+
+//Cancelar edición
+function cancelarEdicion() {
+    idOportunidadEditando = null;
+
+    limpiarFormulario();
+
+    seccionFormulario.classList.remove('modo-edicion');
+
+    formTitle.textContent = 'Nueva Oportunidad';
+    guardarBtn.textContent = 'Guardar candidatura';
+
+    cancelarEdicionBtn.hidden = true;
 
     renderizarOportunidades();
 }

@@ -159,6 +159,11 @@ header p {
     border: 1px solid var(--border);
     border-radius: 12px;
     margin-block: 3rem;
+    transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+#formulario.modo-edicion {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px var(--primary);
 }
 
 #formulario h2 {
@@ -197,6 +202,27 @@ form {
     background-color: var(--accent);
 }
 
+#cancelar-edicion {
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+
+    background-color: var(--surface-hover);
+    color: var(--text);
+
+    font-family: inherit;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+#cancelar-edicion:hover {
+    background-color: var(--secondary);
+}
+
+#cancelar-edicion:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
 
 input,select {
     padding: 0.5rem;
@@ -376,11 +402,33 @@ button:disabled {
     gap: 1rem;
 }
 
-
 footer {
     padding: 2rem 0;
     text-align: center;
     color: var(--text-muted);
+}
+
+.mensaje-exito {
+    position: fixed;
+    right: 1.5rem;
+    bottom: 1.5rem;
+
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+
+    background-color: var(--status-offer);
+    color: #ffffff;
+
+    opacity: 0;
+    transform: translateY(10px);
+    pointer-events: none;
+
+    transition: 0.2s ease;
+}
+
+.mensaje-exito.visible {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 @media (max-width: 768px) {

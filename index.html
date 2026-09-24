@@ -27,7 +27,7 @@
             >
         </button>
             <h1>JobTrack</h1>
-            <p>Esto es un ejemplo de una breve descripcion de texto sobre JobTrack </p>
+            <p>Organiza tus oportunidades laborales, haz seguimiento de cada candidatura y mantén bajo control tus próximos pasos</p>
         </div>
     </header>
 
@@ -76,8 +76,11 @@
                     <small class="error-message">Este campo no está completado</small>
                 </div>
 
+                <button id="cancelar-edicion" type="button" hidden>
+                    Cancelar edición
+                </button>
                 <button id="guardar-candidatura" type="submit">
-                  Guardar candidatura
+                    Guardar candidatura
                 </button>
             </form>
         </section>
@@ -96,6 +99,7 @@
             <p>&copy; 2026 JobTrack. All rights reserved.</p>
         </div>
     </footer>
+    <div id="mensaje-exito" class="mensaje-exito" role="status" aria-live="polite"></div>
     <script src="js/app.js"></script>
 </body>
 </html>
