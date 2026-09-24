@@ -12,19 +12,20 @@
     color-scheme: light;
 
     /* Colores principales */
-    --text: #080e12;
-    --background: #fbfdfe;
-    --primary: #5894b6;
+    --text: #111827;
+    --background: #f3f4f6;
+    --primary: #4f7fa3;
     --secondary: #a6aad9;
-    --accent: #877bc6;
+    --accent: #7c6fc0;
 
     /* Superficies */
     --surface: #ffffff;
-    --surface-hover: #f0f5f8;
+    --surface-soft: #f8fafc;
+    --surface-hover: #eef2f7;
 
     /* Textos y bordes */
     --text-muted: #64748b;
-    --border: #dce5eb;
+    --border: #d6dde6;
 
     /* Estados de candidaturas */
     --status-saved: #64748b;
@@ -38,6 +39,9 @@
     --action-edit-hover: #94a3b8;
     --action-delete: #f87171;
     --action-delete-hover:#ef4444 ;
+
+    --theme-button-bg: #ffffff;
+    --theme-button-hover: #eef2f7;
 }
 
 
@@ -75,6 +79,9 @@
     --action-edit-hover: #64748b;
     --action-delete: #7f1d1d;
     --action-delete-hover: #991b1b;
+
+    --theme-button-bg: #f8fafc;
+    --theme-button-hover: #e2e8f0;
 }
 
 body {
@@ -95,6 +102,44 @@ header {
     text-align: center;
 }
 
+.header-container {
+    position: relative;
+}
+
+#theme-toggle {
+    position: absolute;
+    bottom: -0.5rem;
+    right: -15rem; 
+
+    width: 42px;
+    height: 42px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid var(--border);
+    border-radius: 50%;
+
+    background-color: var(--theme-button-bg);
+    cursor: pointer;
+
+    transition: 0.2s ease;
+}
+#theme-toggle img {
+    width: 22px;
+    height: 22px;
+    object-fit: contain;
+}
+#theme-toggle:hover {
+    background-color: var(--theme-button-hover);
+}
+
+#theme-toggle:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+
 header h1 {
     font-size: clamp(2.5rem, 6vw, 4.5rem);
     line-height: 1;
@@ -109,9 +154,11 @@ header p {
 }
 
 #formulario {
-    padding: 3rem 0;
-    border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
+    padding: 2rem;
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin-block: 3rem;
 }
 
 #formulario h2 {
@@ -239,25 +286,32 @@ select:focus-visible,
     font-size: 0.85rem;
     font-weight: 600;
 }
-.estado-enviada {
+.estado-Enviada {
     color: var(--status-sent);
     border: 1.5px solid var(--status-sent);
 }
-.estado-entrevista {
+.estado-Entrevista {
     color: var(--status-interview);
     border: 1.5px solid var(--status-interview);
 }
-.estado-oferta {
+.estado-Oferta {
     color: var(--status-offer);
     border: 1.5px solid var(--status-offer);
 }
-.estado-cerrada {
+.estado-Cerrada {
     color: var(--status-closed);
     border: 1.5px solid var(--status-closed);
 }
-.estado-guardada {
+.estado-Guardada {
     color: var(--status-saved);
     border: 1.5px solid var(--status-saved);
+}
+.estado-vacio {
+    padding: 3rem 1rem;
+    text-align: center;
+    color: var(--text-muted);
+    border: 1px dashed var(--border);
+    border-radius: 12px;
 }
 
 .oportunidad-acciones {
@@ -301,6 +355,11 @@ select:focus-visible,
 }
 .input-error {
     border-color: var(--action-delete);
+}
+#lista-oportunidades {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
 }
 
 
