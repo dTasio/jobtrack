@@ -51,7 +51,7 @@ ordenarSeguimiento.addEventListener('click', () => {
 document.addEventListener('DOMContentLoaded', () => {
     idOportunidadEditando = null;
     
-    oportunidades = JSON.parse( localStorage.getItem('oportunidades') ) || [];
+    oportunidades = cargarOportunidades();
 
     renderizarOportunidades(oportunidades);
 
@@ -73,6 +73,22 @@ formulario.addEventListener('submit', (event) => {
     const enlaceValido = validarCampo(enlaceInput);
     const nextValido = validarCampo(nextInput);
 
+    const campos = [
+        puestoInput,
+        empresaInput,
+        fechaInput,
+        enlaceInput,
+        nextInput
+    ];
+
+    const primerCampoInvalido = campos.find(
+        (input) => input.getAttribute('aria-invalid') === 'true'
+    );
+
+    if (primerCampoInvalido) {
+        primerCampoInvalido.focus();
+    }
+
     if (puestoValido && empresaValida && fechaValida && enlaceValido && nextValido) {
         
         const puesto = puestoInput.value.trim();
@@ -84,10 +100,12 @@ formulario.addEventListener('submit', (event) => {
 
         const estabaEditando = idOportunidadEditando !== null;
 
-        if (idOportunidadEditando === null) {
+        let nuevasOportunidades;
 
+        if (idOportunidadEditando === null) {
+        
             const oportunidad = {
-            id: generarId(),
+                id: generarId(),
                 puesto,
                 empresa,
                 fecha,
@@ -95,14 +113,27 @@ formulario.addEventListener('submit', (event) => {
                 enlace,
                 next
             };
-
-            oportunidades.push(oportunidad);
-
         
-        }else{
-            const indice = oportunidades.findIndex(oportunidad => oportunidad.id === idOportunidadEditando);
-
-            oportunidades[indice] = {
+            nuevasOportunidades = [
+                ...oportunidades,
+                oportunidad
+            ];
+        
+        } else {
+        
+            const indice = oportunidades.findIndex(
+                (oportunidad) =>
+                    oportunidad.id === idOportunidadEditando
+            );
+        
+            if (indice === -1) {
+                console.error('Oportunidad no encontrada');
+                return;
+            }
+        
+            nuevasOportunidades = [...oportunidades];
+        
+            nuevasOportunidades[indice] = {
                 id: idOportunidadEditando,
                 puesto,
                 empresa,
@@ -111,8 +142,24 @@ formulario.addEventListener('submit', (event) => {
                 enlace,
                 next
             };
+        }
 
+        const guardadoCorrecto =
+        guardarOportunidades(nuevasOportunidades);
+
+        if (!guardadoCorrecto) {
+            alert(
+                'No se pudieron guardar los cambios. Inténtalo de nuevo.'
+            );
+        
+            return;
+        }
+
+        oportunidades = nuevasOportunidades;
+
+        if (estabaEditando) {
             idOportunidadEditando = null;
+
             seccionFormulario.classList.remove('modo-edicion');
             formTitle.textContent = 'Nueva Oportunidad';
             guardarBtn.textContent = 'Guardar candidatura';
@@ -120,14 +167,16 @@ formulario.addEventListener('submit', (event) => {
         }
 
         if (estabaEditando) {
-            mostrarMensaje('Oportunidad actualizada correctamente.');
+            mostrarMensaje(
+                'Oportunidad actualizada correctamente.'
+            );
         } else {
-            mostrarMensaje('Oportunidad guardada correctamente.');
+            mostrarMensaje(
+                'Oportunidad guardada correctamente.'
+            );
         }
 
-        localStorage.setItem('oportunidades', JSON.stringify(oportunidades));
-
-        renderizarOportunidades(oportunidades);
+        aplicarFiltros();
 
         limpiarFormulario();
     }
@@ -152,14 +201,7 @@ listaOportunidades.addEventListener('click', (event) => {
     if (event.target.classList.contains('editar')) {
         const id = event.target.dataset.id;
 
-        const confirmar = confirm('¿Seguro que quieres editar esta oportunidad?');
-
-        if (!confirmar) {
-            return;
-        }
-
         idOportunidadEditando = id;
-
         editarOportunidad(id);
     }
 });
@@ -169,76 +211,79 @@ listaOportunidades.addEventListener('click', (event) => {
 // Validar campos
 function validarCampo(input) {
     const valor = input.value.trim();
+
+    const errorId = input.getAttribute('aria-describedby');
+    const mensajeError = document.getElementById(errorId);
+
     if (!valor) {
         input.classList.add('input-error');
-        input.nextElementSibling.style.display = 'block';
+        input.setAttribute('aria-invalid', 'true');
+
+        mensajeError.style.display = 'block';
+
         return false;
     }
+
     input.classList.remove('input-error');
-    input.nextElementSibling.style.display = 'none';
+    input.setAttribute('aria-invalid', 'false');
+
+    mensajeError.style.display = 'none';
+
     return true;
 }
 
 //Renderizar oportunidades
 function renderizarOportunidades(lista) {
+
+    // Limpiar listado anterior
+    listaOportunidades.textContent = '';
+
+
+    // ESTADO VACÍO
     if (lista.length === 0) {
+
+        const estadoVacio = document.createElement('div');
+        estadoVacio.classList.add('estado-vacio');
+
+
+        const mensaje = document.createElement('p');
+        const descripcion = document.createElement('span');
+
+
         if (oportunidades.length === 0) {
-            listaOportunidades.innerHTML = `
-                <div class="estado-vacio">
-                    <p>Aún no hay oportunidades guardadas.</p>
-                    <span>Añade tu primera oportunidad desde el formulario.</span>
-                </div>
-            `;
+
+            mensaje.textContent =
+                'Aún no hay oportunidades guardadas.';
+
+            descripcion.textContent =
+                'Añade tu primera oportunidad desde el formulario.';
+
         } else {
-            listaOportunidades.innerHTML = `
-                <div class="estado-vacio">
-                    <p>No se encontraron oportunidades.</p>
-                    <span>Prueba a cambiar la búsqueda o los filtros.</span>
-                </div>
-            `;
+
+            mensaje.textContent =
+                'No se encontraron oportunidades.';
+
+            descripcion.textContent =
+                'Prueba a cambiar la búsqueda o los filtros.';
         }
+
+
+        estadoVacio.appendChild(mensaje);
+        estadoVacio.appendChild(descripcion);
+
+        listaOportunidades.appendChild(estadoVacio);
 
         return;
     }
-    const cardsHTML = lista.map((oportunidad) => {
-        let claseEdicion = '';
-
-        if (idOportunidadEditando) {
-            if (oportunidad.id === idOportunidadEditando) {
-                claseEdicion = 'editando';
-            } else {
-                claseEdicion = 'atenuada';
-            }
-        }
-
-        const estaEditando = idOportunidadEditando !== null;
-        const esLaEditada = oportunidad.id === idOportunidadEditando;
-
-        const botonesDesactivados =
-        estaEditando && !esLaEditada ? 'disabled' : '';
-        
-        return `
-            <article class="oportunidad-card ${claseEdicion}">
-                <div class="oportunidad-info">
-                    <h3>${oportunidad.puesto}</h3>
-                    <p class="empresa">${oportunidad.empresa}</p>
-                    <p>Candidatura: <time class="time-info" datetime="${oportunidad.fecha}">${formatearFecha(oportunidad.fecha)}</time></p>
-                    <a href="${oportunidad.enlace}" target="_blank" rel="noopener noreferrer">Ver Oferta</a>
-                </div>
-                <div class="oportunidad-seguimiento">
-                    <span class="estado estado-${oportunidad.estado}">${oportunidad.estado}</span>
-                    <p>Proximo seguimiento: <time class="time-seguimiento" datetime="${oportunidad.next}">${formatearFecha(oportunidad.next)}</time></p>
 
 
-                </div>
-                <div class="oportunidad-acciones">
-                    <button class="editar" data-id="${oportunidad.id}" ${botonesDesactivados}>Editar</button>
-                    <button class="eliminar" data-id="${oportunidad.id}" ${botonesDesactivados}>Eliminar</button>
-                </div>
-            </article>
-        `
-    }).join('');
-    listaOportunidades.innerHTML = cardsHTML;
+    // CREAR CARDS
+    lista.forEach((oportunidad) => {
+
+        const card = crearCardOportunidad(oportunidad);
+
+        listaOportunidades.appendChild(card);
+    });
 }
 
 //Limpiar formulario
@@ -283,9 +328,26 @@ function cambiarTema() {
 
 //Eliminar oportunidad
 function eliminarOportunidad(id) {
-    oportunidades = oportunidades.filter((oportunidad) => oportunidad.id !== id);
-    localStorage.setItem('oportunidades', JSON.stringify(oportunidades));
-    renderizarOportunidades(oportunidades);
+    const nuevasOportunidades =
+        oportunidades.filter(
+            (oportunidad) =>
+                oportunidad.id !== id
+        );
+
+    const guardadoCorrecto =
+        guardarOportunidades(nuevasOportunidades);
+
+    if (!guardadoCorrecto) {
+        alert(
+            'No se pudo eliminar la oportunidad. Inténtalo de nuevo.'
+        );
+
+        return;
+    }
+
+    oportunidades = nuevasOportunidades;
+
+    aplicarFiltros();
 }
 
 //Editar oportunidad
@@ -312,7 +374,9 @@ function editarOportunidad(id) {
     formTitle.textContent = 'Editar Oportunidad';
     guardarBtn.textContent = 'Guardar cambios';
 
-    renderizarOportunidades(oportunidades);
+    aplicarFiltros();
+
+    puestoInput.focus();
 }
 
 //Mostrar Pop-up
@@ -339,7 +403,7 @@ function cancelarEdicion() {
 
     cancelarEdicionBtn.hidden = true;
 
-    renderizarOportunidades(oportunidades);
+    aplicarFiltros();
 }
 
 //Filtros
@@ -388,4 +452,206 @@ function limpiarErrores() {
             input.nextElementSibling.style.display = 'none';
         }
     });
+}
+
+// Crear card de oportunidad
+function crearCardOportunidad(oportunidad) {
+
+    // CARD
+    const article = document.createElement('article');
+    article.classList.add('oportunidad-card');
+
+
+    // ESTADO VISUAL DE EDICIÓN
+    if (idOportunidadEditando) {
+        if (oportunidad.id === idOportunidadEditando) {
+            article.classList.add('editando');
+        } else {
+            article.classList.add('atenuada');
+        }
+    }
+
+
+    // INFORMACIÓN PRINCIPAL
+    const info = document.createElement('div');
+    info.classList.add('oportunidad-info');
+
+
+    const titulo = document.createElement('h3');
+    titulo.textContent = oportunidad.puesto;
+
+
+    const empresa = document.createElement('p');
+    empresa.classList.add('empresa');
+    empresa.textContent = oportunidad.empresa;
+
+
+    const candidatura = document.createElement('p');
+    candidatura.textContent = 'Candidatura: ';
+
+
+    const fecha = document.createElement('time');
+    fecha.classList.add('time-info');
+    fecha.dateTime = oportunidad.fecha;
+    fecha.textContent = formatearFecha(oportunidad.fecha);
+
+    candidatura.appendChild(fecha);
+
+
+    // ENLACE
+    const enlace = document.createElement('a');
+    enlace.textContent = 'Ver oferta';
+    enlace.target = '_blank';
+    enlace.rel = 'noopener noreferrer';
+
+    try {
+        const url = new URL(oportunidad.enlace);
+
+        if (url.protocol === 'http:' || url.protocol === 'https:') {
+            enlace.href = url.href;
+        } else {
+            enlace.textContent = 'Enlace no válido';
+            enlace.removeAttribute('target');
+        }
+
+    } catch {
+        enlace.textContent = 'Enlace no válido';
+        enlace.removeAttribute('target');
+    }
+
+
+    info.appendChild(titulo);
+    info.appendChild(empresa);
+    info.appendChild(candidatura);
+    info.appendChild(enlace);
+
+
+    // SEGUIMIENTO
+    const seguimiento = document.createElement('div');
+    seguimiento.classList.add('oportunidad-seguimiento');
+
+
+    const estado = document.createElement('span');
+    estado.classList.add(
+        'estado',
+        `estado-${oportunidad.estado}`
+    );
+
+    estado.textContent = oportunidad.estado;
+
+
+    const proximoSeguimiento = document.createElement('p');
+    proximoSeguimiento.textContent = 'Próximo seguimiento: ';
+
+
+    const fechaSeguimiento = document.createElement('time');
+    fechaSeguimiento.classList.add('time-seguimiento');
+    fechaSeguimiento.dateTime = oportunidad.next;
+    fechaSeguimiento.textContent = formatearFecha(oportunidad.next);
+
+    proximoSeguimiento.appendChild(fechaSeguimiento);
+
+
+    seguimiento.appendChild(estado);
+    seguimiento.appendChild(proximoSeguimiento);
+
+
+    // ACCIONES
+    const acciones = document.createElement('div');
+    acciones.classList.add('oportunidad-acciones');
+
+
+    const botonEditar = document.createElement('button');
+    botonEditar.classList.add('editar');
+    botonEditar.dataset.id = oportunidad.id;
+    botonEditar.textContent = 'Editar';
+
+
+    const botonEliminar = document.createElement('button');
+    botonEliminar.classList.add('eliminar');
+    botonEliminar.dataset.id = oportunidad.id;
+    botonEliminar.textContent = 'Eliminar';
+
+
+    // Mientras haya una oportunidad en edición,
+    // bloqueamos las acciones de todas las cards.
+    const estaEditando = idOportunidadEditando !== null;
+
+    botonEditar.disabled = estaEditando;
+    botonEliminar.disabled = estaEditando;
+
+
+    acciones.appendChild(botonEditar);
+    acciones.appendChild(botonEliminar);
+
+
+    // CONSTRUIR CARD
+    article.appendChild(info);
+    article.appendChild(seguimiento);
+    article.appendChild(acciones);
+
+
+    return article;
+}
+
+// Validar datos de localStorage
+function esOportunidadValida(oportunidad) {
+    return (
+        oportunidad &&
+        typeof oportunidad === 'object' &&
+        typeof oportunidad.id === 'string' &&
+        typeof oportunidad.puesto === 'string' &&
+        typeof oportunidad.empresa === 'string' &&
+        typeof oportunidad.fecha === 'string' &&
+        typeof oportunidad.estado === 'string' &&
+        typeof oportunidad.enlace === 'string' &&
+        typeof oportunidad.next === 'string'
+    );
+}
+function cargarOportunidades() {
+    try {
+        const datosGuardados = localStorage.getItem('oportunidades');
+
+        if (!datosGuardados) {
+            return [];
+        }
+
+        const datos = JSON.parse(datosGuardados);
+
+        if (!Array.isArray(datos)) {
+            console.error('Los datos guardados no tienen un formato válido.');
+            return [];
+        }
+
+        const datosValidos = datos.every(esOportunidadValida);
+
+        if (!datosValidos) {
+            console.error('Hay oportunidades guardadas con datos no válidos.');
+            return [];
+        }
+
+        return datos;
+
+    } catch (error) {
+        console.error('Error al cargar las oportunidades:', error);
+        return [];
+    }
+}
+function guardarOportunidades(lista) {
+    try {
+        localStorage.setItem(
+            'oportunidades',
+            JSON.stringify(lista)
+        );
+
+        return true;
+
+    } catch (error) {
+        console.error(
+            'Error al guardar las oportunidades:',
+            error
+        );
+
+        return false;
+    }
 }

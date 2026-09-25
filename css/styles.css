@@ -48,6 +48,16 @@
     /* Botón de tema */
     --theme-button-bg: #ffffff;
     --theme-button-hover: #eef2f7;
+
+    /* Contrastes de texto */
+    --link-color: #3f6f91;
+    --error-text: #b91c1c;
+
+    --primary-action-bg: #3f6f91;
+    --primary-action-hover: #6d5fb0;
+    --primary-action-text: #ffffff;
+
+    --success-text: #ffffff;
 }
 
 
@@ -89,6 +99,16 @@
     /* Botón de tema */
     --theme-button-bg: #f8fafc;
     --theme-button-hover: #e2e8f0;
+
+    /* Contrastes de texto */
+    --link-color: #5b9bc2;
+    --error-text: #f87171;
+
+    --primary-action-bg: #3f6f91;
+    --primary-action-hover: #6d5fb0;
+    --primary-action-text: #ffffff;
+
+    --success-text: #111827;
 }
 
 
@@ -106,6 +126,22 @@ body {
 .container {
     width: min(90%, 1200px);
     margin-inline: auto;
+}
+
+/* ========================================
+   ACCESIBILIDAD
+======================================== */
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
 }
 
 
@@ -144,8 +180,10 @@ header p {
 
 #theme-toggle {
     position: absolute;
-    right: -15rem;
-    bottom: -0.5rem;
+    top: 50%;
+    right: 0;
+
+    transform: translateY(-50%);
 
     width: 42px;
     height: 42px;
@@ -185,7 +223,7 @@ header p {
 
 #formulario {
     padding: 2rem;
-    margin-block: 3rem;
+    margin-block: 4rem;
 
     background-color: var(--surface);
 
@@ -240,6 +278,8 @@ select {
 
     background-color: var(--surface);
     color: var(--text);
+
+    font-family: inherit;
 }
 
 input:focus-visible,
@@ -263,8 +303,8 @@ select:focus-visible,
     border: none;
     border-radius: 4px;
 
-    background-color: var(--primary);
-    color: var(--text);
+    background-color: var(--primary-action-bg);
+    color: var(--primary-action-text);
 
     font-family: inherit;
 
@@ -273,7 +313,7 @@ select:focus-visible,
 }
 
 #guardar-candidatura:hover {
-    background-color: var(--accent);
+    background-color: var(--primary-action-hover);
 }
 
 #cancelar-edicion {
@@ -308,12 +348,12 @@ select:focus-visible,
 .error-message {
     display: none;
 
-    color: var(--action-delete);
+    color: var(--error-text);
     font-size: 0.85rem;
 }
 
 .input-error {
-    border-color: var(--action-delete);
+    border-color: var(--error-text);
 }
 
 
@@ -398,7 +438,7 @@ select:focus-visible,
 
 .oportunidad-card {
     display: grid;
-    grid-template-columns: 1fr 1fr auto;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
     gap: 1.5rem;
     align-items: center;
 
@@ -431,6 +471,7 @@ select:focus-visible,
     display: flex;
     flex-direction: column;
     gap: 0.25rem;
+    min-width: 0;
 }
 
 .oportunidad-info h3 {
@@ -438,6 +479,11 @@ select:focus-visible,
 
     font-size: 1.25rem;
     font-weight: 700;
+}
+
+.oportunidad-info h3,
+.empresa {
+    overflow-wrap: anywhere;
 }
 
 .empresa {
@@ -453,7 +499,7 @@ select:focus-visible,
 .oportunidad-info a {
     width: fit-content;
 
-    color: var(--primary);
+    color: var(--link-color);
 
     font-weight: 600;
     text-decoration-thickness: 2px;
@@ -540,9 +586,12 @@ select:focus-visible,
     color: var(--text);
 
     font-size: 0.95rem;
+    font-family: inherit;
 
     cursor: pointer;
     transition: 0.2s ease;
+
+    min-height: 44px;
 }
 
 .editar {
@@ -559,6 +608,13 @@ select:focus-visible,
 
 .eliminar:hover {
     background-color: var(--action-delete-hover);
+}
+
+.editar:focus-visible,
+.eliminar:focus-visible,
+.oportunidad-info a:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
 }
 
 button:disabled {
@@ -596,7 +652,7 @@ button:disabled {
     border-radius: 8px;
 
     background-color: var(--status-offer);
-    color: #ffffff;
+    color: var(--success-text);
 
     opacity: 0;
     transform: translateY(10px);
@@ -656,8 +712,10 @@ footer {
         right: 0.5rem;
         bottom: auto;
 
-        width: 36px;
-        height: 36px;
+        width: 44px;
+        height: 44px;
+
+        transform: none;
     }
 
     #theme-toggle img {

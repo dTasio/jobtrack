@@ -37,20 +37,20 @@
             <form>
                 <div class="form-group">
                     <label for="puesto">Puesto</label>
-                    <input type="text" id="puesto" name="puesto">
-                    <small class="error-message">Este campo no está completado</small>
+                    <input type="text" id="puesto" aria-describedby="error-puesto">
+                    <small id="error-puesto" class="error-message">Este campo no está completado</small>
                 </div>
                 
                 <div class="form-group">
                     <label for="empresa">Empresa</label>
-                    <input type="text" id="empresa" name="empresa">
-                    <small class="error-message">Este campo no está completado</small>
+                    <input type="text" id="empresa" aria-describedby="error-empresa">
+                    <small id="error-empresa" class="error-message">Este campo no está completado</small>
                 </div>
                 
                 <div class="form-group">
                     <label for="fecha">Fecha de candidatura:</label>
-                    <input type="date" id="fecha" name="fecha">
-                    <small class="error-message">Este campo no está completado</small>
+                    <input type="date" id="fecha" aria-describedby="error-fecha">
+                    <small id="error-fecha" class="error-message">Este campo no está completado</small>
                 </div>
                 
                 <div class="form-group">
@@ -66,14 +66,14 @@
 
                 <div class="form-group">
                     <label for="enlace">Enlace de la oferta</label>
-                    <input type="url" id="enlace" name="enlace">
-                    <small class="error-message">Este campo no está completado</small>
+                    <input type="url" id="enlace" aria-describedby="error-enlace">
+                    <small id="error-enlace" class="error-message">Este campo no está completado</small>
                 </div>
                 
                 <div class="form-group">
                     <label for="next">Proximo seguimiento</label>
-                    <input type="date" id="next" name="next">
-                    <small class="error-message">Este campo no está completado</small>
+                    <input type="date" id="next" name="next" aria-describedby="error-next">
+                    <small id="error-next" class="error-message">Este campo no está completado</small>
                 </div>
 
                 <button id="cancelar-edicion" type="button" hidden>
@@ -88,11 +88,19 @@
         <section id="oportunidades">
             <h2>Oportunidades</h2>
             <div class="filtros">
+                <label for="buscar-oportunidad" class="visually-hidden">
+                    Buscar oportunidades
+                </label>
+                
                 <input
                     type="search"
                     id="buscar-oportunidad"
                     placeholder="Buscar por puesto o empresa"
                 >
+
+                <label for="filtro-estado" class="visually-hidden">
+                    Filtrar por estado
+                </label>
 
                 <select id="filtro-estado">
                     <option value="todos">Todos los estados</option>
@@ -107,7 +115,7 @@
                 </button>
             </div>
             <div id="lista-oportunidades">
-                //Contenido de oportunidades
+                <!-- Contenido de oportunidades -->
             </div>
         </section>
 
