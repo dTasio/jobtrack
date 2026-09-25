@@ -87,6 +87,25 @@
 
         <section id="oportunidades">
             <h2>Oportunidades</h2>
+            <div class="filtros">
+                <input
+                    type="search"
+                    id="buscar-oportunidad"
+                    placeholder="Buscar por puesto o empresa"
+                >
+
+                <select id="filtro-estado">
+                    <option value="todos">Todos los estados</option>
+                    <option value="Guardada">Guardada</option>
+                    <option value="Enviada">Enviada</option>
+                    <option value="Entrevista">Entrevista</option>
+                    <option value="Oferta">Oferta</option>
+                    <option value="Cerrada">Cerrada</option>
+                </select>
+                <button id="ordenar-seguimiento" type="button">
+                    Ordenar por seguimiento
+                </button>
+            </div>
             <div id="lista-oportunidades">
                 //Contenido de oportunidades
             </div>

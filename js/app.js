@@ -17,6 +17,9 @@ const themeToggle = document.querySelector('#theme-toggle');
 const themeIcon = document.querySelector('#theme-icon');
 
 const listaOportunidades = document.querySelector('#lista-oportunidades');
+const buscarInput = document.querySelector('#buscar-oportunidad');
+const filtroEstado = document.querySelector('#filtro-estado');
+const ordenarSeguimiento = document.querySelector('#ordenar-seguimiento');
 
 const mensajeExito = document.querySelector('#mensaje-exito');
 
@@ -24,17 +27,33 @@ let oportunidades = [];
 
 let idOportunidadEditando = null;
 
+let ordenarPorSeguimiento = false;
+
 //LISTENERS
 themeToggle.addEventListener('click', cambiarTema);
 
 cancelarEdicionBtn.addEventListener('click', cancelarEdicion);
+
+buscarInput.addEventListener('input', aplicarFiltros);
+filtroEstado.addEventListener('change', aplicarFiltros);
+ordenarSeguimiento.addEventListener('click', () => {
+    ordenarPorSeguimiento = !ordenarPorSeguimiento;
+
+    if (ordenarPorSeguimiento) {
+        ordenarSeguimiento.textContent = 'Restablecer orden';
+    } else {
+        ordenarSeguimiento.textContent = 'Ordenar por seguimiento';
+    }
+
+    aplicarFiltros();
+});
 
 document.addEventListener('DOMContentLoaded', () => {
     idOportunidadEditando = null;
     
     oportunidades = JSON.parse( localStorage.getItem('oportunidades') ) || [];
 
-    renderizarOportunidades();
+    renderizarOportunidades(oportunidades);
 
     const temaGuardado = localStorage.getItem('theme');
 
@@ -108,7 +127,7 @@ formulario.addEventListener('submit', (event) => {
 
         localStorage.setItem('oportunidades', JSON.stringify(oportunidades));
 
-        renderizarOportunidades();
+        renderizarOportunidades(oportunidades);
 
         limpiarFormulario();
     }
@@ -161,18 +180,27 @@ function validarCampo(input) {
 }
 
 //Renderizar oportunidades
-function renderizarOportunidades() {
-    if (oportunidades.length === 0) {
-        listaOportunidades.innerHTML = `
-            <div class="estado-vacio">
-                <p>Aún no hay oportunidades guardadas.</p>
-                <span>Añade tu primera oportunidad desde el formulario.</span>
-            </div>
-        `;
+function renderizarOportunidades(lista) {
+    if (lista.length === 0) {
+        if (oportunidades.length === 0) {
+            listaOportunidades.innerHTML = `
+                <div class="estado-vacio">
+                    <p>Aún no hay oportunidades guardadas.</p>
+                    <span>Añade tu primera oportunidad desde el formulario.</span>
+                </div>
+            `;
+        } else {
+            listaOportunidades.innerHTML = `
+                <div class="estado-vacio">
+                    <p>No se encontraron oportunidades.</p>
+                    <span>Prueba a cambiar la búsqueda o los filtros.</span>
+                </div>
+            `;
+        }
 
         return;
     }
-    const cardsHTML = oportunidades.map((oportunidad) => {
+    const cardsHTML = lista.map((oportunidad) => {
         let claseEdicion = '';
 
         if (idOportunidadEditando) {
@@ -257,7 +285,7 @@ function cambiarTema() {
 function eliminarOportunidad(id) {
     oportunidades = oportunidades.filter((oportunidad) => oportunidad.id !== id);
     localStorage.setItem('oportunidades', JSON.stringify(oportunidades));
-    renderizarOportunidades();
+    renderizarOportunidades(oportunidades);
 }
 
 //Editar oportunidad
@@ -281,7 +309,7 @@ function editarOportunidad(id) {
     formTitle.textContent = 'Editar Oportunidad';
     guardarBtn.textContent = 'Guardar cambios';
 
-    renderizarOportunidades();
+    renderizarOportunidades(oportunidades);
 }
 
 //Mostrar Pop-up
@@ -307,5 +335,34 @@ function cancelarEdicion() {
 
     cancelarEdicionBtn.hidden = true;
 
-    renderizarOportunidades();
+    renderizarOportunidades(oportunidades);
+}
+
+//Filtros
+function aplicarFiltros() {
+    const terminoBusqueda = buscarInput.value.trim().toLowerCase();
+    const estadoSeleccionado = filtroEstado.value;
+
+    let oportunidadesFiltradas = oportunidades.filter((oportunidad) => {
+        const coincideBusqueda =
+            oportunidad.puesto.toLowerCase().includes(terminoBusqueda) ||
+            oportunidad.empresa.toLowerCase().includes(terminoBusqueda);
+
+        const coincideEstado =
+            estadoSeleccionado === 'todos' ||
+            oportunidad.estado === estadoSeleccionado;
+
+        return coincideBusqueda && coincideEstado;
+    });
+
+    if (ordenarPorSeguimiento) {
+        oportunidadesFiltradas = [...oportunidadesFiltradas].sort((a, b) => {
+            const fechaA = new Date(a.next);
+            const fechaB = new Date(b.next);
+
+            return fechaA - fechaB;
+        });
+    }
+
+    renderizarOportunidades(oportunidadesFiltradas);
 }

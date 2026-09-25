@@ -251,6 +251,47 @@ select:focus-visible,
     letter-spacing: -0.04em;
 }
 
+.filtros {
+    display: grid;
+    grid-template-columns: 2fr 1fr auto;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+#buscar-oportunidad {
+    min-width: 0;
+}
+
+#filtro-estado {
+    cursor: pointer;
+}
+
+#ordenar-seguimiento {
+    padding: 0.65rem 1rem;
+
+    border: 1px solid var(--border);
+    border-radius: 6px;
+
+    background-color: var(--surface);
+    color: var(--text);
+
+    font-family: inherit;
+    font-weight: 500;
+
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+#ordenar-seguimiento:hover {
+    background-color: var(--surface-hover);
+    border-color: var(--primary);
+}
+
+#ordenar-seguimiento:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+
 .oportunidad-card {
     display: grid;
     grid-template-columns: 1fr 1fr auto;
@@ -454,6 +495,10 @@ footer {
     #theme-toggle img {
         width: 18px;
         height: 18px;
+    }
+
+    .filtros {
+        grid-template-columns: 1fr;
     }
 }
 
