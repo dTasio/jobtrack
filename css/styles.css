@@ -33,7 +33,7 @@
     --border: #d6dde6;
 
     /* Estados de candidaturas */
-    --status-saved: #64748b;
+    --status-saved: #475569;
     --status-sent: #2563eb;
     --status-interview: #7c3aed;
     --status-offer: #15803d;
@@ -92,7 +92,7 @@
 
     /* Acciones */
     --action-edit: #475569;
-    --action-edit-hover: #64748b;
+    --action-edit-hover: #334155;
     --action-delete: #7f1d1d;
     --action-delete-hover: #991b1b;
 
@@ -507,7 +507,7 @@ select:focus-visible,
 }
 
 .oportunidad-info a:hover {
-    color: var(--accent);
+    color: var(--link-color);
     text-decoration: underline;
 }
 

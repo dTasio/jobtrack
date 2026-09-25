@@ -29,6 +29,16 @@ let idOportunidadEditando = null;
 
 let ordenarPorSeguimiento = false;
 
+let errorCargaOportunidades = false;
+
+const estadosValidos = [
+    'Guardada',
+    'Enviada',
+    'Entrevista',
+    'Oferta',
+    'Cerrada'
+];
+
 //LISTENERS
 themeToggle.addEventListener('click', cambiarTema);
 
@@ -70,7 +80,7 @@ formulario.addEventListener('submit', (event) => {
     const puestoValido = validarCampo(puestoInput);
     const empresaValida = validarCampo(empresaInput);
     const fechaValida = validarCampo(fechaInput);
-    const enlaceValido = validarCampo(enlaceInput);
+    const enlaceValido = validarEnlace(enlaceInput);
     const nextValido = validarCampo(nextInput);
 
     const campos = [
@@ -232,11 +242,80 @@ function validarCampo(input) {
     return true;
 }
 
+//Validar enlace
+function validarEnlace(input) {
+    const valor = input.value.trim();
+
+    const errorId = input.getAttribute('aria-describedby');
+    const mensajeError = document.getElementById(errorId);
+
+    if (!valor) {
+        input.classList.add('input-error');
+        input.setAttribute('aria-invalid', 'true');
+
+        mensajeError.textContent = 'Este campo no está completado';
+        mensajeError.style.display = 'block';
+
+        return false;
+    }
+
+    try {
+        const url = new URL(valor);
+
+        if (url.protocol !== 'http:' && url.protocol !== 'https:') {
+            input.classList.add('input-error');
+            input.setAttribute('aria-invalid', 'true');
+
+            mensajeError.textContent =
+                'El enlace debe comenzar por http:// o https://';
+
+            mensajeError.style.display = 'block';
+
+            return false;
+        }
+
+    } catch {
+        input.classList.add('input-error');
+        input.setAttribute('aria-invalid', 'true');
+
+        mensajeError.textContent = 'Introduce una URL válida.';
+        mensajeError.style.display = 'block';
+
+        return false;
+    }
+
+    input.classList.remove('input-error');
+    input.setAttribute('aria-invalid', 'false');
+    mensajeError.style.display = 'none';
+
+    return true;
+}
+
 //Renderizar oportunidades
 function renderizarOportunidades(lista) {
 
     // Limpiar listado anterior
     listaOportunidades.textContent = '';
+
+    if (errorCargaOportunidades) {
+        const estadoError = document.createElement('div');
+        estadoError.classList.add('estado-vacio');
+
+        const mensaje = document.createElement('p');
+        mensaje.textContent =
+            'No se pudieron cargar las oportunidades guardadas.';
+
+        const descripcion = document.createElement('span');
+        descripcion.textContent =
+            'Los datos anteriores se han conservado para evitar sobrescribirlos.';
+
+        estadoError.appendChild(mensaje);
+        estadoError.appendChild(descripcion);
+
+        listaOportunidades.appendChild(estadoError);
+
+        return;
+    }
 
 
     // ESTADO VACÍO
@@ -448,8 +527,13 @@ function limpiarErrores() {
     campos.forEach((input) => {
         input.classList.remove('input-error');
 
-        if (input.nextElementSibling) {
-            input.nextElementSibling.style.display = 'none';
+        input.setAttribute('aria-invalid', 'false');
+
+        const errorId = input.getAttribute('aria-describedby');
+        const mensajeError = document.getElementById(errorId);
+
+        if (mensajeError) {
+            mensajeError.style.display = 'none';
         }
     });
 }
@@ -603,7 +687,7 @@ function esOportunidadValida(oportunidad) {
         typeof oportunidad.puesto === 'string' &&
         typeof oportunidad.empresa === 'string' &&
         typeof oportunidad.fecha === 'string' &&
-        typeof oportunidad.estado === 'string' &&
+        estadosValidos.includes(oportunidad.estado) &&
         typeof oportunidad.enlace === 'string' &&
         typeof oportunidad.next === 'string'
     );
@@ -619,25 +703,49 @@ function cargarOportunidades() {
         const datos = JSON.parse(datosGuardados);
 
         if (!Array.isArray(datos)) {
-            console.error('Los datos guardados no tienen un formato válido.');
+            errorCargaOportunidades = true;
+
+            console.error(
+                'Los datos guardados no tienen un formato válido.'
+            );
+
             return [];
         }
 
         const datosValidos = datos.every(esOportunidadValida);
 
         if (!datosValidos) {
-            console.error('Hay oportunidades guardadas con datos no válidos.');
+            errorCargaOportunidades = true;
+
+            console.error(
+                'Hay oportunidades guardadas con datos no válidos.'
+            );
+
             return [];
         }
 
         return datos;
 
     } catch (error) {
-        console.error('Error al cargar las oportunidades:', error);
+        errorCargaOportunidades = true;
+
+        console.error(
+            'Error al cargar las oportunidades:',
+            error
+        );
+
         return [];
     }
 }
 function guardarOportunidades(lista) {
+    if (errorCargaOportunidades) {
+        console.error(
+            'No se puede guardar porque hubo un error al cargar los datos anteriores.'
+        );
+
+        return false;
+    }
+
     try {
         localStorage.setItem(
             'oportunidades',

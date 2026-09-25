@@ -2,7 +2,7 @@
 
 JobTrack es una aplicación web para gestionar y organizar candidaturas laborales desde una única interfaz.
 
-El proyecto está desarrollado con HTML, CSS y JavaScript vanilla y forma parte de mi portfolio de desarrollo web.
+El proyecto está desarrollado con HTML, CSS y JavaScript Vanilla y forma parte de mi portfolio de desarrollo web.
 
 ## Funcionalidades
 
@@ -31,9 +31,9 @@ El proyecto está desarrollado con HTML, CSS y JavaScript vanilla y forma parte 
 
 ## Tecnologías
 
-- HTML5
-- CSS3
-- JavaScript
+- HTML
+- CSS
+- JavaScript (Vanilla JS)
 - LocalStorage
 - Git
 - GitHub
@@ -77,7 +77,7 @@ No requiere instalación ni dependencias.
 1. Clona o descarga el repositorio.
 2. Abre `index.html` en el navegador.
 
-También estará disponible mediante GitHub Pages.
+La aplicación está publicada mediante GitHub Pages.
 
 ## Captura
 
