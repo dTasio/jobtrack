@@ -81,11 +81,11 @@ También estará disponible mediante GitHub Pages.
 
 ## Captura
 
-> Se añadirá una captura de la aplicación antes de cerrar la versión final.
+![Vista previa de JobTrack](assets/images/jobtrack-preview.PNG)
 
 ## Demo
 
-> Enlace disponible próximamente mediante GitHub Pages.
+https://dtasio.github.io/jobtrack/
 
 ## Posibles mejoras futuras
 
@@ -103,4 +103,4 @@ Estas funcionalidades quedan fuera del alcance de la primera versión.
 
 ## Estado del proyecto
 
-JobTrack V1 — fase final de revisión y publicación.
+JobTrack V1 — completado y publicado.
