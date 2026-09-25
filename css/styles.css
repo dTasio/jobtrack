@@ -1,8 +1,13 @@
+/* ========================================
+   RESET
+======================================== */
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
+
 
 /* ========================================
    TEMA CLARO
@@ -38,8 +43,9 @@
     --action-edit: #a9b6c7;
     --action-edit-hover: #94a3b8;
     --action-delete: #f87171;
-    --action-delete-hover:#ef4444 ;
+    --action-delete-hover: #ef4444;
 
+    /* Botón de tema */
     --theme-button-bg: #ffffff;
     --theme-button-hover: #eef2f7;
 }
@@ -80,21 +86,32 @@
     --action-delete: #7f1d1d;
     --action-delete-hover: #991b1b;
 
+    /* Botón de tema */
     --theme-button-bg: #f8fafc;
     --theme-button-hover: #e2e8f0;
 }
+
+
+/* ========================================
+   ESTILOS GLOBALES
+======================================== */
 
 body {
     background-color: var(--background);
     color: var(--text);
     line-height: 1.6;
-    font-family: 'IBM Plex Sans',Arial, sans-serif;;
+    font-family: 'IBM Plex Sans', Arial, sans-serif;
 }
 
 .container {
     width: min(90%, 1200px);
     margin-inline: auto;
 }
+
+
+/* ========================================
+   HEADER
+======================================== */
 
 header {
     padding: 1.5rem 0;
@@ -106,10 +123,29 @@ header {
     position: relative;
 }
 
+header h1 {
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    line-height: 1;
+    margin-bottom: 1.5rem;
+    letter-spacing: -0.04em;
+}
+
+header p {
+    max-width: 620px;
+    margin: 0 auto;
+    color: var(--text-muted);
+    font-size: 1.2rem;
+}
+
+
+/* ========================================
+   BOTÓN DE TEMA
+======================================== */
+
 #theme-toggle {
     position: absolute;
+    right: -15rem;
     bottom: -0.5rem;
-    right: -15rem; 
 
     width: 42px;
     height: 42px;
@@ -122,15 +158,17 @@ header {
     border-radius: 50%;
 
     background-color: var(--theme-button-bg);
-    cursor: pointer;
 
+    cursor: pointer;
     transition: 0.2s ease;
 }
+
 #theme-toggle img {
     width: 22px;
     height: 22px;
     object-fit: contain;
 }
+
 #theme-toggle:hover {
     background-color: var(--theme-button-hover);
 }
@@ -140,37 +178,37 @@ header {
     outline-offset: 2px;
 }
 
-header h1 {
-    font-size: clamp(2.5rem, 6vw, 4.5rem);
-    line-height: 1;
-    margin-bottom: 1.5rem;
-    letter-spacing: -0.04em;
-}
-header p {
-    max-width: 620px;
-    margin: 0 auto;
-    color: var(--text-muted);
-    font-size: 1.2rem;
-}
+
+/* ========================================
+   FORMULARIO
+======================================== */
 
 #formulario {
     padding: 2rem;
+    margin-block: 3rem;
+
     background-color: var(--surface);
+
     border: 1px solid var(--border);
     border-radius: 12px;
-    margin-block: 3rem;
-    transition: box-shadow 0.2s ease, border-color 0.2s ease;
+
+    transition:
+        box-shadow 0.2s ease,
+        border-color 0.2s ease;
 }
+
 #formulario.modo-edicion {
     border-color: var(--primary);
     box-shadow: 0 0 0 2px var(--primary);
 }
 
 #formulario h2 {
+    margin-bottom: 1.5rem;
+
     font-size: clamp(1.5rem, 6vw, 2rem);
     line-height: 1;
-    margin-bottom: 1.5rem;
     letter-spacing: -0.04em;
+
     text-align: center;
 }
 
@@ -186,24 +224,61 @@ form {
     gap: 0.5rem;
 }
 
+
+/* ========================================
+   CAMPOS DEL FORMULARIO
+======================================== */
+
+input,
+select {
+    width: 100%;
+    min-height: 44px;
+    padding: 0.5rem;
+
+    border: 1px solid var(--border);
+    border-radius: 4px;
+
+    background-color: var(--surface);
+    color: var(--text);
+}
+
+input:focus-visible,
+select:focus-visible,
+#guardar-candidatura:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+
+
+/* ========================================
+   BOTONES DEL FORMULARIO
+======================================== */
+
 #guardar-candidatura {
     grid-column: 2;
     justify-self: end;
+
     padding: 0.75rem 1rem;
+
     border: none;
     border-radius: 4px;
+
     background-color: var(--primary);
     color: var(--text);
+
+    font-family: inherit;
+
     cursor: pointer;
     transition: 0.2s ease;
-    font-family: inherit;
 }
+
 #guardar-candidatura:hover {
     background-color: var(--accent);
 }
 
 #cancelar-edicion {
     padding: 0.75rem 1rem;
+
     border: 1px solid var(--border);
     border-radius: 4px;
 
@@ -211,6 +286,7 @@ form {
     color: var(--text);
 
     font-family: inherit;
+
     cursor: pointer;
     transition: 0.2s ease;
 }
@@ -224,37 +300,49 @@ form {
     outline-offset: 2px;
 }
 
-input,select {
-    padding: 0.5rem;
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    background-color: var(--surface);
-    color: var(--text);
-    width: 100%;
-    min-height: 44px;
-    
+
+/* ========================================
+   VALIDACIÓN DEL FORMULARIO
+======================================== */
+
+.error-message {
+    display: none;
+
+    color: var(--action-delete);
+    font-size: 0.85rem;
 }
-input:focus-visible,
-select:focus-visible,
-#guardar-candidatura:focus-visible {
-    outline: 2px solid var(--primary);
-    outline-offset: 2px;
+
+.input-error {
+    border-color: var(--action-delete);
 }
+
+
+/* ========================================
+   SECCIÓN DE OPORTUNIDADES
+======================================== */
 
 #oportunidades {
     padding: 3rem 0;
 }
+
 #oportunidades h2 {
+    margin-bottom: 1.5rem;
+
     font-size: clamp(1.5rem, 6vw, 2rem);
     line-height: 1;
-    margin-bottom: 1.5rem;
     letter-spacing: -0.04em;
 }
+
+
+/* ========================================
+   FILTROS Y ORDENACIÓN
+======================================== */
 
 .filtros {
     display: grid;
     grid-template-columns: 2fr 1fr auto;
     gap: 1rem;
+
     margin-bottom: 1.5rem;
 }
 
@@ -292,16 +380,36 @@ select:focus-visible,
     outline-offset: 2px;
 }
 
+
+/* ========================================
+   LISTADO DE OPORTUNIDADES
+======================================== */
+
+#lista-oportunidades {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+
+/* ========================================
+   CARDS DE OPORTUNIDADES
+======================================== */
+
 .oportunidad-card {
     display: grid;
     grid-template-columns: 1fr 1fr auto;
     gap: 1.5rem;
     align-items: center;
+
+    padding: 1.5rem;
+
     background-color: var(--surface);
+
     border: 1px solid var(--border);
     border-radius: 12px;
-    padding: 1.5rem;
 }
+
 .oportunidad-card:hover {
     background-color: var(--surface-hover);
 }
@@ -314,6 +422,11 @@ select:focus-visible,
     opacity: 0.55;
 }
 
+
+/* ========================================
+   INFORMACIÓN DE LA OPORTUNIDAD
+======================================== */
+
 .oportunidad-info {
     display: flex;
     flex-direction: column;
@@ -321,73 +434,131 @@ select:focus-visible,
 }
 
 .oportunidad-info h3 {
+    color: var(--primary);
+
     font-size: 1.25rem;
     font-weight: 700;
-    color: var(--primary);
 }
+
 .empresa {
     color: var(--text);
     font-weight: 500;
 }
 
-.time-info, .time-seguimiento {
+.time-info,
+.time-seguimiento {
     font-size: 1.05rem;
-}
-
-.oportunidad-seguimiento {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    justify-content: center;
 }
 
 .oportunidad-info a {
     width: fit-content;
+
     color: var(--primary);
+
     font-weight: 600;
     text-decoration-thickness: 2px;
     text-underline-offset: 3px;
 }
+
 .oportunidad-info a:hover {
     color: var(--accent);
     text-decoration: underline;
 }
 
-.estado{
-    padding: 0.25rem 0.75rem;
+
+/* ========================================
+   SEGUIMIENTO Y ESTADO
+======================================== */
+
+.oportunidad-seguimiento {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    height: 100%;
+}
+
+.estado {
     display: inline-flex;
     width: fit-content;
+
+    margin-bottom: 0.25rem;
+    padding: 0.25rem 0.75rem;
+
     border-radius: 999px;
+
     font-size: 0.85rem;
     font-weight: 600;
-    margin-bottom: 0.25rem;
 }
+
 .estado-Enviada {
     color: var(--status-sent);
     border: 1.5px solid var(--status-sent);
 }
+
 .estado-Entrevista {
     color: var(--status-interview);
     border: 1.5px solid var(--status-interview);
 }
+
 .estado-Oferta {
     color: var(--status-offer);
     border: 1.5px solid var(--status-offer);
 }
+
 .estado-Cerrada {
     color: var(--status-closed);
     border: 1.5px solid var(--status-closed);
 }
+
 .estado-Guardada {
     color: var(--status-saved);
     border: 1.5px solid var(--status-saved);
 }
-.estado-vacio {
-    padding: 3rem 1rem;
-    text-align: center;
-    color: var(--text-muted);
-    border: 1px dashed var(--border);
-    border-radius: 12px;
+
+
+/* ========================================
+   ACCIONES DE LAS CARDS
+======================================== */
+
+.oportunidad-acciones {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.5rem;
+
+    height: 100%;
+}
+
+.editar,
+.eliminar {
+    padding: 0.5rem 1rem;
+
+    border: none;
+    border-radius: 4px;
+
+    color: var(--text);
+
+    font-size: 0.95rem;
+
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.editar {
+    background-color: var(--action-edit);
+}
+
+.editar:hover {
+    background-color: var(--action-edit-hover);
+}
+
+.eliminar {
+    background-color: var(--action-delete);
+}
+
+.eliminar:hover {
+    background-color: var(--action-delete-hover);
 }
 
 button:disabled {
@@ -395,59 +566,25 @@ button:disabled {
     cursor: not-allowed;
 }
 
-.oportunidad-acciones {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    justify-content: center;
-    gap: 0.5rem;
-}
-.editar {
-    padding: 0.5rem 1rem;
-    border: none;
-    border-radius: 4px;
-    background-color: var(--action-edit);
-    color: var(--text);
-    cursor: pointer;
-    transition: 0.2s ease;
-    font-size: 0.95rem;
-}
-.eliminar {
-    padding: 0.5rem 1rem;
-    border: none;
-    border-radius: 4px;
-    background-color: var(--action-delete);
-    color: var(--text);
-    cursor: pointer;
-    transition: 0.2s ease;
-    font-size: 0.95rem;
-}
-.eliminar:hover {
-    background-color: var(--action-delete-hover);
-}
-.editar:hover {
-    background-color: var(--action-edit-hover);
-}
 
-.error-message {
-    color: var(--action-delete);
-    font-size: 0.85rem;
-    display: none;
-}
-.input-error {
-    border-color: var(--action-delete);
-}
-#lista-oportunidades {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
+/* ========================================
+   ESTADO VACÍO
+======================================== */
 
-footer {
-    padding: 2rem 0;
-    text-align: center;
+.estado-vacio {
+    padding: 3rem 1rem;
+
+    border: 1px dashed var(--border);
+    border-radius: 12px;
+
     color: var(--text-muted);
+    text-align: center;
 }
+
+
+/* ========================================
+   MENSAJE DE ÉXITO
+======================================== */
 
 .mensaje-exito {
     position: fixed;
@@ -455,6 +592,7 @@ footer {
     bottom: 1.5rem;
 
     padding: 0.75rem 1rem;
+
     border-radius: 8px;
 
     background-color: var(--status-offer);
@@ -462,6 +600,7 @@ footer {
 
     opacity: 0;
     transform: translateY(10px);
+
     pointer-events: none;
 
     transition: 0.2s ease;
@@ -472,17 +611,46 @@ footer {
     transform: translateY(0);
 }
 
+
+/* ========================================
+   FOOTER
+======================================== */
+
+footer {
+    padding: 2rem 0;
+
+    color: var(--text-muted);
+    text-align: center;
+}
+
+
+/* ========================================
+   RESPONSIVE
+======================================== */
+
 @media (max-width: 768px) {
+
+    /* Formulario */
+
     form {
         grid-template-columns: 1fr;
     }
+
     #guardar-candidatura {
         grid-column: 1;
         justify-self: stretch;
     }
+
+
+    /* Cards */
+
     .oportunidad-card {
         grid-template-columns: 1fr;
     }
+
+
+    /* Botón de tema */
+
     #theme-toggle {
         top: 0.25rem;
         right: 0.5rem;
@@ -497,8 +665,10 @@ footer {
         height: 18px;
     }
 
+
+    /* Filtros */
+
     .filtros {
         grid-template-columns: 1fr;
     }
 }
-

@@ -290,6 +290,9 @@ function eliminarOportunidad(id) {
 
 //Editar oportunidad
 function editarOportunidad(id) {
+
+    limpiarErrores();
+
     cancelarEdicionBtn.hidden = false;
 
     const oportunidadEditar = oportunidades.find((oportunidad) => oportunidad.id === id);
@@ -327,6 +330,7 @@ function cancelarEdicion() {
     idOportunidadEditando = null;
 
     limpiarFormulario();
+    limpiarErrores();
 
     seccionFormulario.classList.remove('modo-edicion');
 
@@ -365,4 +369,23 @@ function aplicarFiltros() {
     }
 
     renderizarOportunidades(oportunidadesFiltradas);
+}
+
+//Limpiar errores
+function limpiarErrores() {
+    const campos = [
+        puestoInput,
+        empresaInput,
+        fechaInput,
+        enlaceInput,
+        nextInput
+    ];
+
+    campos.forEach((input) => {
+        input.classList.remove('input-error');
+
+        if (input.nextElementSibling) {
+            input.nextElementSibling.style.display = 'none';
+        }
+    });
 }
